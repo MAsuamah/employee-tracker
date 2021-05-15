@@ -1,14 +1,9 @@
------Departments----
-
 INSERT INTO departments (dept_name)
 VALUES
   ('HR'),
   ('Design'),
   ('Finance'),
   ('Software Development');
-
-
------Roles----
 
 INSERT INTO roles (title, salary, department_id)
 VALUES
@@ -20,20 +15,18 @@ VALUES
   ('QA and Test Engineer', 85000, 4);
 
 
------Employees----
-
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
-  ('Jessica', 'Jones', 4, 2),
   ('Michelle', 'Obama', 5, NULL),
-  ('Hermione', 'Granger', 1, 2),
-  ('Stephen', 'Curry', 1, 2),
-  ('Viola', 'Davis', 1, 2),
-  ('Kevin', 'Durant', 6, 2),
+  ('Jessica', 'Jones', 4, 1),
+  ('Hermione', 'Granger', 1, 1),
+  ('Stephen', 'Curry', 1, 1),
+  ('Viola', 'Davis', 1, 1),
+  ('Kevin', 'Durant', 6, 1),
   ('Kyrie', 'Irving', 3, NULL),
-  ('Aubrey', 'Graham', 4, 2),
+  ('Aubrey', 'Graham', 4, 1),
   ('Sandra', 'Bullock', 2, NULL),
-  ('Beyonce', 'Knowles', 6, 2);
+  ('Beyonce', 'Knowles', 6, 1);
 
 
 

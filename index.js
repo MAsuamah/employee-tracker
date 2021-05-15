@@ -58,6 +58,20 @@ function startApp() {
         updateEmployee()
         break;
     }
-  })
+  });
+};
+
+//====================Functions to call for choices selected===========================//
+
+const viewDepartments = () =>  {
+  const sql = `SELECT * FROM departments`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err)
+    }
+    console.table(rows)
+  });
 }
+
+
 
