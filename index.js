@@ -110,7 +110,7 @@ const addDepartment = () =>  {
       if (err) {
         console.log(err)
       }
-      startApp();
+      viewDepartments();
     });
   })
 }
