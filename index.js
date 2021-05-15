@@ -142,6 +142,32 @@ const addRole = () =>  {
   });
 };
 
+const addEmployee = () =>  {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: 'Enter the first name of the employee you would like to add:'
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: 'Enter the employee\'s last name:'
+    }
+  ]).then(ee => {
+    const sql = `INSERT INTO employees (first_name, last_name)
+    VALUES (?,?)`;
+
+    const roleAdded = [ee.firstName, ee.lastName];
+
+    db.query(sql, roleAdded, (err, rows) => {
+      if (err) {
+        console.log(err);
+      }
+      viewEmployees();
+    });
+  });
+};
 
 
 
