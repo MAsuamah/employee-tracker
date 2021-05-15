@@ -15,7 +15,7 @@ function startApp() {
   inquirer.prompt([
     {
       type: 'list',
-      name: 'view',
+      name: 'toDo',
       message: 'What would you like to do?',
       choices: [
                 'View all departments?', 
@@ -27,5 +27,37 @@ function startApp() {
                 'Update an employee role?'
               ]
     },
-  ])
+  //Call specific function depending on choice selected
+  ]).then(function(action) {
+    switch(action.toDo) {
+      case 'View all departments?':
+        viewDepartments()
+        break;
+
+      case 'View all roles?':
+        viewRoles()
+        break;
+
+      case 'View all employees?':
+        viewDepartments()
+        break;
+
+      case 'Add a department?':
+        addDepartment()
+        break;
+
+      case 'Add a role?':
+        addRole()
+        break;
+
+      case 'Add an employee?':
+        addEmployee()
+        break;
+
+      case 'Update an employee role?':
+        updateEmployee()
+        break;
+    }
+  })
 }
+
