@@ -99,21 +99,48 @@ const addDepartment = () =>  {
   inquirer.prompt([
     {
       type: 'input',
-      name: 'departmentName',
+      name: 'addDept',
       message: 'Enter the name of the department you would like to add:'
-    },
+    }
   ]).then(deptName => {
     const sql = `INSERT INTO departments (dept_name)
     VALUES (?)`;
-    const dept = deptName.departmentName
+    const dept = deptName.addDept
     db.query(sql, dept, (err, rows) => {
       if (err) {
-        console.log(err)
+        console.log(err);
       }
       viewDepartments();
     });
-  })
-}
+  });
+};
+
+const addRole = () =>  {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'Enter the title of the role you would like to add:'
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'Enter the salary of the role:'
+    }
+  ]).then(role => {
+    const sql = `INSERT INTO roles (title, salary)
+    VALUES (?,?)`;
+
+    const roleAdded = [role.title, role.salary];
+
+    db.query(sql, roleAdded, (err, rows) => {
+      if (err) {
+        console.log(err);
+      }
+      viewRoles();
+    });
+  });
+};
 
 
 
