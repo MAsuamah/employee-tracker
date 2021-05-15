@@ -38,7 +38,7 @@ function startApp() {
         break;
 
       case 'View all employees?':
-        viewDepartments()
+        viewEmployees()
         break;
 
       case 'Add a department?':
@@ -83,6 +83,40 @@ const viewRoles = () =>  {
     startApp();
   });
 }
+
+const viewEmployees = () =>  {
+  const sql = `SELECT * FROM employees`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err)
+    }
+    console.table(rows)
+    startApp();
+  });
+}
+
+const addDepartment = () =>  {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'departmentName',
+      message: 'Enter the name of the department you would like to add:'
+    },
+  ]).then(deptName => {
+    const sql = `INSERT INTO departments (dept_name)
+    VALUES (?)`;
+    const dept = deptName.departmentName
+    db.query(sql, dept, (err, rows) => {
+      if (err) {
+        console.log(err)
+      }
+      startApp();
+    });
+  })
+}
+
+
+
 
 
 
