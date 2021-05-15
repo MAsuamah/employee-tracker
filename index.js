@@ -3,10 +3,9 @@ const db = require('./db/connection');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
-// Start server after DB connection
+// Start app after DB connection
 db.connect(err => {
   if (err) throw err;
-  console.log('Database connected.');
   startApp();
 });
 
@@ -70,6 +69,18 @@ const viewDepartments = () =>  {
       console.log(err)
     }
     console.table(rows)
+    startApp();
+  });
+}
+
+const viewRoles = () =>  {
+  const sql = `SELECT * FROM roles`;
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err)
+    }
+    console.table(rows)
+    startApp();
   });
 }
 
