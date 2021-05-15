@@ -1,3 +1,4 @@
+//Requirements
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
@@ -9,6 +10,8 @@ db.connect(err => {
   startApp();
 });
 
+
+//Inquirer Prompts
 function startApp() {
   console.log('hey!')
 }
