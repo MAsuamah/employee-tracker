@@ -29,3 +29,25 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 * Pick which ever action you would like to execute and and follow the prompts. See the [Walkthrough-Video](#walkthrough-video) for more on how to use the app.
 
 ## Walkthrough-Video
+https://drive.google.com/file/d/1z7SQHMx6fz1TZF-3L5BmW5CBpW8SVa0Z/view?usp=sharing
+
+## Built With
+* Node.js
+* MySQL
+* Inquirer
+
+
+## Credits
+https://stackoverflow.com/questions/18680680/can-a-foreign-key-refer-to-a-primary-key-in-the-same-table
+https://www.w3schools.com/js/js_switch.asp
+https://dev.mysql.com/doc/refman/8.0/en/string-functions.html
+https://stackoverflow.com/questions/10710271/join-table-twice-on-two-different-columns-of-the-same-table
+https://www.mysqltutorial.org/mysql-join/
+
+
+
+## Contributors
+Michelle Asuamah
+
+## Contact
+If you would like to contact me you can reach me at michey.asmah21@gmail.com.
