@@ -2,7 +2,9 @@
 
 ## Description
 The Employee Tracker is a command line app used to keep track and manage the departments, roles, and employees of an organization. Features include viewing, adding, and updating employees, roles, managers, departments.
-[screenshot]
+
+
+![Employe-Tracker Screenshot](https://user-images.githubusercontent.com/77217156/118411824-9522c200-b664-11eb-8d9e-044807ea9404.png)
 
 ## How to Install
 ** This app uses MySQL and you will need to have MySQL installed to operate this application.**
@@ -19,7 +21,12 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 
 ## How To Use
 * After following the installation instructions you are able to use the application. Run `node index.js` to do so. 
-* You will be taken to the main menu where you can choose what you would like do in the Employee Tracker. The main menu looks like following: [screenshot]
+* You will be taken to the main menu where you can choose what you would like do in the Employee Tracker. The main menu looks like following: 
+
+<img width="338" alt="Screen Shot 2021-05-16 at 4 25 26 PM" src="https://user-images.githubusercontent.com/77217156/118411786-5260ea00-b664-11eb-8d65-44de454e7478.png">
+
+* To exit the application use CTL + C
+
 * Pick which ever action you would like to execute and and follow the prompts. See the [Walkthrough-Video](#walkthrough-video) for more on how to use the app.
 
 ## Walkthrough-Video
