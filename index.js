@@ -185,7 +185,6 @@ const updateEmployeeRole = () =>  {
       for (let i = 0; i < rows.length; i++) {
         employeeChoices.push(rows[i].Employee)
       }
-      console.log(employeeChoices)
   });
 
   db.query(sqlRole, (err, rows) => {
@@ -196,10 +195,20 @@ const updateEmployeeRole = () =>  {
       for (let i = 0; i < rows.length; i++) {
         roleChoices.push(rows[i].title)
       }
-      console.log(roleChoices)
-  });
+  })
 
-  
-
-
+  inquirer.prompt([
+    {
+        name: 'eeChoices',
+        type: 'list',
+        message: 'Whose role would you like to update?',
+        choices: employeeChoices
+    }, 
+    {
+        name: 'roleChoices',
+        type: 'list',
+        message: 'What is their new role?',
+        choices: roleChoices
+    }
+  ])
 };
