@@ -54,7 +54,7 @@ function startApp() {
         break;
 
       case 'Update an employee role?':
-        updateEmployee()
+        updateEmployeeRole()
         break;
     }
   });
@@ -169,7 +169,37 @@ const addEmployee = () =>  {
   });
 };
 
+const updateEmployeeRole = () =>  {
+
+  let roleChoices = []
+  let employeeChoices = []
+  
+  const sqlRole = `SELECT id, title from roles`
+  const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
+
+  db.query(sqlEE, (err, rows) => {
+    
+    if (err) {
+      console.log(err);
+    }
+      for (let i = 0; i < rows.length; i++) {
+        employeeChoices.push(rows[i].Employee)
+      }
+      console.log(employeeChoices)
+  });
+
+  db.query(sqlRole, (err, rows) => {
+    
+    if (err) {
+      console.log(err);
+    }
+      for (let i = 0; i < rows.length; i++) {
+        roleChoices.push(rows[i].title)
+      }
+      console.log(roleChoices)
+  });
+
+  
 
 
-
-
+};
