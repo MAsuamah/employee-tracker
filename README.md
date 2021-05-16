@@ -3,8 +3,7 @@
 ## Description
 The Employee Tracker is a command line app used to keep track and manage the departments, roles, and employees of an organization. Features include viewing, adding, and updating employees, roles, managers, departments.
 
-
-![Employe-Tracker Screenshot](https://user-images.githubusercontent.com/77217156/118411824-9522c200-b664-11eb-8d9e-044807ea9404.png)
+<img width="364" alt="Screen Shot 2021-05-16 at 4 24 52 PM" src="https://user-images.githubusercontent.com/77217156/118413618-382c0980-b66e-11eb-8863-32ccdc50e9ff.png">
 
 ## How to Install
 ** This app uses MySQL and you will need to have MySQL installed to operate this application.**
