@@ -25,10 +25,7 @@ function startApp() {
                 'Add an employee?',
                 'Update an employee role?',
                 'Update an employee\'s manager?',
-                'Update a role\'s department?',
-                'Remove a department?',
-                'Remove a role?',
-                'Remove an employee?'
+                'Update a role\'s department?'
               ]
     },
   //Call specific function depending on choice selected
@@ -69,24 +66,13 @@ function startApp() {
       case 'Update a role\'s department?':
         updateRoleDept()
         break;
-      
-      case 'Remove a department?':
-        deleteDept()
-        break;
-
-      case 'Remove a role?':
-        deleteRole()
-        break;
-
-      case 'Remove an employee?':
-        deleteEmployee()
-        break;
     };
   });
 };
 
 //====================Functions to call for choices selected===========================//
 
+//View Departments function
 const viewDepartments = () =>  {
   const sql = `SELECT * FROM departments`;
   db.query(sql, (err, rows) => {
@@ -98,6 +84,7 @@ const viewDepartments = () =>  {
   });
 };
 
+//View Roles function
 const viewRoles = () =>  {
   const sql = `SELECT roles.title, roles.salary, departments.dept_name
   FROM roles
@@ -112,6 +99,7 @@ const viewRoles = () =>  {
   });
 };
 
+//View Employees function
 const viewEmployees = () =>  {
   const sql = `SELECT employees.first_name, employees.last_name, roles.title, CONCAT(emp.first_name, ' ' ,emp.last_name) AS Manager 
   FROM employees
@@ -126,6 +114,7 @@ const viewEmployees = () =>  {
   });
 };
 
+//Add Departments function
 const addDepartment = () =>  {
   inquirer.prompt([
     {
@@ -133,6 +122,7 @@ const addDepartment = () =>  {
       name: 'addDept',
       message: 'Enter the name of the department you would like to add:'
     }
+  //Take input entered and add it to table
   ]).then(deptName => {
     const sql = `INSERT INTO departments (dept_name)
     VALUES (?)`;
@@ -146,6 +136,7 @@ const addDepartment = () =>  {
   });
 };
 
+//Add Role function
 const addRole = () =>  {
   inquirer.prompt([
     {
@@ -158,6 +149,7 @@ const addRole = () =>  {
       name: 'salary',
       message: 'Enter the salary of the role:'
     }
+  //Take input entered and add it to table
   ]).then(role => {
     const sql = `INSERT INTO roles (title, salary)
     VALUES (?,?)`;
@@ -173,6 +165,7 @@ const addRole = () =>  {
   });
 };
 
+//Add Employee function
 const addEmployee = () =>  {
   inquirer.prompt([
     {
@@ -185,6 +178,7 @@ const addEmployee = () =>  {
       name: 'lastName',
       message: 'Enter the employee\'s last name:'
     }
+  //Take input entered and add it to table
   ]).then(ee => {
     const sql = `INSERT INTO employees (first_name, last_name)
     VALUES (?,?)`;
@@ -200,8 +194,10 @@ const addEmployee = () =>  {
   });
 };
 
+//Update Employee function
 const updateEmployeeRole = () =>  {
   
+  //Arrays that will provide a list of options in the inquirer choices
   let employeeChoices = []
   let roleChoices = []
   
@@ -212,6 +208,7 @@ const updateEmployeeRole = () =>  {
     if (err) {
       console.log(err);
     }
+    //Get results from sql query and push Employee (first name last name) into employeeChoices array.
     for (let i = 0; i < ee.length; i++) {
       employeeChoices.push(ee[i].Employee)
     };
@@ -220,9 +217,11 @@ const updateEmployeeRole = () =>  {
       if (err) {
         console.log(err);
       }
+      //Get results from sql query and push roles (title) into roleChoices array.
       for (let i = 0; i < role.length; i++) {
         roleChoices.push(role[i].title);
       };
+
       inquirer.prompt([
         {
           name: 'eeChoices',
@@ -239,19 +238,21 @@ const updateEmployeeRole = () =>  {
       ]).then(function(ans) {
         let employeeID;
         let roleID;
-    
+
+        //Loop through sql query results and get element that matches selected choice, get element's ID and assign to employeeID variable
         for (i=0; i < ee.length; i++){
           if (ans.eeChoices == ee[i].Employee) {
             employeeID = ee[i].id;
           }
         };
-
+        //Loop through sql query results and get element that matches selected choice, get element's ID and assign to roleID variable
         for (i=0; i < role.length; i++){
           if (ans.roleChoices == role[i].title){
             roleID = role[i].id;
           }
         };
-
+          
+        //Update query for assigning new role to employee
         const sqlUpdate = `UPDATE employees SET role_id = ${roleID} WHERE id = ${employeeID}`
         db.query(sqlUpdate, (err, res) => {
           if (err) {
@@ -264,8 +265,10 @@ const updateEmployeeRole = () =>  {
   });
 };
 
+//Update Employee's Manager function
 const updateEmployeeMngr = () =>  {
   
+  //Array that will provide a list of options in the inquirer choices
   let employeeNames = []
   
   const sqlEE = `SELECT id, CONCAT(first_name,' ',last_name) AS Employee FROM employees`
@@ -274,11 +277,10 @@ const updateEmployeeMngr = () =>  {
     if (err) {
       console.log(err);
     }
+    //Get results from sql query and push Employee (first name last name) into employeeNames array.
     for (let i = 0; i < ee.length; i++) {
       employeeNames.push(ee[i].Employee)
     };
-
-    console.log(employeeNames)
 
     inquirer.prompt([
       {
@@ -296,19 +298,21 @@ const updateEmployeeMngr = () =>  {
     ]).then(function(ans) {
       let employeeID;
       let mngrID;
-  
+
+      //Loop through sql query results and get element that matches selected choice, get element's ID and assign to employeeID variable
       for (i=0; i < ee.length; i++){
         if (ans.eeChoices == ee[i].Employee) {
           employeeID = ee[i].id;
         }
       };
-
+      //Loop through sql query results and get element that matches selected choice, get element's ID and assign to mngrID variable
       for (i=0; i < ee.length; i++){
         if (ans.mngrChoices == ee[i].Employee){
           mngrID = ee[i].id;
         }
       };
 
+      //Update query for assigning new manager to employee
       const sqlUpdate = `UPDATE employees SET manager_id = ${mngrID} WHERE id = ${employeeID}`
       db.query(sqlUpdate, (err, res) => {
         if (err) {
@@ -320,8 +324,10 @@ const updateEmployeeMngr = () =>  {
   });
 };
 
+//Update Role's Department function
 const updateRoleDept = () =>  {
-  
+
+  //Arrays that will provide a list of options in the inquirer choices
   let roleArr = []
   let deptArr = []
   
@@ -332,6 +338,7 @@ const updateRoleDept = () =>  {
     if (err) {
       console.log(err);
     }
+    //Get results from sql query and push role (title) into roleArr.
     for (let i = 0; i < role.length; i++) {
       roleArr.push(role[i].title)
     };
@@ -340,9 +347,11 @@ const updateRoleDept = () =>  {
       if (err) {
         console.log(err);
       }
+      //Get results from sql query and push department (dept_name) into deptArr.
       for (let i = 0; i < dept.length; i++) {
         deptArr.push(dept[i].dept_name);
       };
+      
       inquirer.prompt([
         {
           name: 'roleUD',
@@ -359,19 +368,21 @@ const updateRoleDept = () =>  {
       ]).then(function(ans) {
         let deptID;
         let roleID;
-    
+
+        //Loop through sql query results and get element that matches selected choice, get element's ID and assign to roleID variable
         for (i=0; i < role.length; i++){
           if (ans.roleUD == role[i].title) {
             roleID = role[i].id;
           }
         };
-
+        //Loop through sql query results and get element that matches selected choice, get element's ID and assign to deptID variable
         for (i=0; i < dept.length; i++){
           if (ans.newDept == dept[i].dept_name) {
             deptID = dept[i].id;
           }
         };
 
+        //Update query for assigning a department to role
         const sqlUpdate = `UPDATE roles SET department_id = ${deptID} WHERE id = ${roleID}`
         db.query(sqlUpdate, (err, res) => {
           if (err) {
@@ -384,126 +395,3 @@ const updateRoleDept = () =>  {
   });
 };
 
-
-const deleteDept = () =>  {
-  
-  let deptArr = []
-  
-  const sqlDept = `SELECT id, dept_name FROM departments`
-
-  db.query(sqlDept, (err, dept) => {
-    if (err) {
-      console.log(err);
-    }
-    for (let i = 0; i < dept.length; i++) {
-      deptArr.push(dept[i].dept_name);
-    };
-
-    inquirer.prompt([
-      {
-        name: 'deptDelete',
-        type: 'list',
-        message: 'Which department would you like to remove?',
-        choices: deptArr
-      }
-    ]).then(function(ans) {
-      let deptID;
-  
-      for (i=0; i < dept.length; i++){
-        if (ans.deptDelete == dept[i].dept_name) {
-          deptID = dept[i].id;
-        }
-      };
-
-      const sqlUpdate = `DELETE FROM departments WHERE id = ${deptID}`
-      db.query(sqlUpdate, (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-        viewDepartments();
-      });
-    });
-  });
-};
-
-const deleteRole = () =>  {
-  
-  let roleArr = []
-  
-  const sqlRole = `SELECT id, title FROM roles`
-
-  db.query(sqlRole, (err, role) => {
-    if (err) {
-      console.log(err);
-    }
-    for (let i = 0; i < role.length; i++) {
-      roleArr.push(role[i].title);
-    };
-
-    inquirer.prompt([
-      {
-        name: 'roleDelete',
-        type: 'list',
-        message: 'Which role would you like to remove?',
-        choices: roleArr
-      }
-    ]).then(function(ans) {
-      let roleID;
-  
-      for (i=0; i < role.length; i++){
-        if (ans.roleDelete == role[i].title) {
-          roleID = role[i].id;
-        }
-      };
-
-      const sqlUpdate = `DELETE FROM roles WHERE id = ${roleID}`
-      db.query(sqlUpdate, (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-        viewRoles();
-      });
-    });
-  });
-};
-
-const deleteEmployee = () =>  {
-  
-  let eeArr = []
-  
-  const sqlEE = `SELECT id, CONCAT(first_name,' ',last_name) AS Employee FROM employees`
-
-  db.query(sqlEE, (err, ee) => {
-    if (err) {
-      console.log(err);
-    }
-    for (let i = 0; i < ee.length; i++) {
-      eeArr.push(ee[i].Employee);
-    };
-
-    inquirer.prompt([
-      {
-        name: 'eeDelete',
-        type: 'list',
-        message: 'Which employee would you like to remove?',
-        choices: eeArr
-      }
-    ]).then(function(ans) {
-      let employeeID;
-  
-      for (i=0; i < ee.length; i++){
-        if (ans.eeDelete == ee[i].Employee) {
-          employeeID = ee[i].id;
-        }
-      };
-
-      const sqlUpdate = `DELETE FROM employees WHERE id = ${employeeID}`
-      db.query(sqlUpdate, (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-        viewEmployees()
-      });
-    });
-  });
-};
