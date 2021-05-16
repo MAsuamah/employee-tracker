@@ -24,7 +24,8 @@ function startApp() {
                 'Add a department?',
                 'Add a role?',
                 'Add an employee?',
-                'Update an employee role?'
+                'Update an employee role?',
+                'Update an employee\'s manager?'
               ]
     },
   //Call specific function depending on choice selected
@@ -57,7 +58,11 @@ function startApp() {
       case 'Update an employee role?':
         updateEmployeeRole()
         break;
-    }
+
+      case 'Update an employee\'s manager?':
+        updateEmployeeMngr()
+        break;
+    };
   });
 };
 
@@ -72,10 +77,13 @@ const viewDepartments = () =>  {
     console.table(rows)
     startApp();
   });
-}
+};
 
 const viewRoles = () =>  {
-  const sql = `SELECT * FROM roles`;
+  const sql = `SELECT roles.title, roles.salary, departments.dept_name
+  FROM roles
+  LEFT JOIN departments ON roles.department_id = departments.id`;
+
   db.query(sql, (err, rows) => {
     if (err) {
       console.log(err)
@@ -83,10 +91,13 @@ const viewRoles = () =>  {
     console.table(rows)
     startApp();
   });
-}
+};
 
 const viewEmployees = () =>  {
-  const sql = `SELECT * FROM employees`;
+  const sql = `SELECT employees.first_name, employees.last_name, roles.title, CONCAT(emp.first_name, ' ' ,emp.last_name) AS Manager 
+  FROM employees
+  LEFT JOIN roles ON employees.role_id = roles.id
+  LEFT JOIN employees emp ON employees.manager_id = emp.id; `;
   db.query(sql, (err, rows) => {
     if (err) {
       console.log(err)
@@ -94,7 +105,7 @@ const viewEmployees = () =>  {
     console.table(rows)
     startApp();
   });
-}
+};
 
 const addDepartment = () =>  {
   inquirer.prompt([
@@ -184,17 +195,15 @@ const updateEmployeeRole = () =>  {
     }
     for (let i = 0; i < ee.length; i++) {
       employeeChoices.push(ee[i].Employee)
-    }
+    };
 
     db.query(sqlRole, (err, role) => {
       if (err) {
         console.log(err);
       }
       for (let i = 0; i < role.length; i++) {
-        roleChoices.push(role[i].title)
-      }
-      console.log(ee)
-      console.log(role)
+        roleChoices.push(role[i].title);
+      };
       inquirer.prompt([
         {
           name: 'eeChoices',
@@ -216,23 +225,80 @@ const updateEmployeeRole = () =>  {
           if (ans.eeChoices == ee[i].Employee) {
             employeeID = ee[i].id;
           }
-        }
+        };
 
         for (i=0; i < role.length; i++){
           if (ans.roleChoices == role[i].title){
             roleID = role[i].id;
           }
-        }
+        };
+
         const sqlUpdate = `UPDATE employees SET role_id = ${roleID} WHERE id = ${employeeID}`
         db.query(sqlUpdate, (err, res) => {
           if (err) {
             console.log(err);
           }
+          viewEmployees();
         });
-      })
+      });
     });
-  })
-}
+  });
+};
 
+const updateEmployeeMngr = () =>  {
+  
+  let employeeNames = []
+  
+  const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
+
+  db.query(sqlEE, (err, ee) => {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < ee.length; i++) {
+      employeeNames.push(ee[i].Employee)
+    };
+
+    console.log(employeeNames)
+
+    inquirer.prompt([
+      {
+        name: 'eeChoices',
+        type: 'list',
+        message: 'Whose manager would you like to update?',
+        choices: employeeNames
+      },
+      {
+        name: 'mngrChoices',
+        type: 'list',
+        message: 'Who is their new manager?',
+        choices: employeeNames
+      }
+    ]).then(function(ans) {
+      let employeeID;
+      let mngrID;
+  
+      for (i=0; i < ee.length; i++){
+        if (ans.eeChoices == ee[i].Employee) {
+          employeeID = ee[i].id;
+        }
+      };
+
+      for (i=0; i < ee.length; i++){
+        if (ans.mngrChoices == ee[i].Employee){
+          mngrID = ee[i].id;
+        }
+      };
+
+      const sqlUpdate = `UPDATE employees SET manager_id = ${mngrID} WHERE id = ${employeeID}`
+      db.query(sqlUpdate, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        viewEmployees();
+      });
+    });
+  });
+};
 
 
