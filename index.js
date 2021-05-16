@@ -26,7 +26,8 @@ function startApp() {
                 'Add an employee?',
                 'Update an employee role?',
                 'Update an employee\'s manager?',
-                'Update a role\'s department?'
+                'Update a role\'s department?',
+                'Remove a department?'
               ]
     },
   //Call specific function depending on choice selected
@@ -67,6 +68,11 @@ function startApp() {
       case 'Update a role\'s department?':
         updateRoleDept()
         break;
+      
+      case 'Remove a department?':
+        deleteDept()
+        break;
+
         
     };
   });
@@ -366,6 +372,48 @@ const updateRoleDept = () =>  {
           }
           viewRoles();
         });
+      });
+    });
+  });
+};
+
+
+const deleteDept = () =>  {
+  
+  let deptArr = []
+  
+  const sqlDept = `SELECT id, dept_name FROM departments`
+
+  db.query(sqlDept, (err, dept) => {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < dept.length; i++) {
+      deptArr.push(dept[i].dept_name);
+    };
+
+    inquirer.prompt([
+      {
+        name: 'deptDelete',
+        type: 'list',
+        message: 'Which department would you like to delete?',
+        choices: deptArr
+      }
+    ]).then(function(ans) {
+      let deptID;
+  
+      for (i=0; i < dept.length; i++){
+        if (ans.deptDelete == dept[i].dept_name) {
+          deptID = dept[i].id;
+        }
+      };
+
+      const sqlUpdate = `DELETE FROM departments WHERE id = ${deptID}`
+      db.query(sqlUpdate, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        viewDepartments();
       });
     });
   });
