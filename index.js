@@ -25,7 +25,8 @@ function startApp() {
                 'Add a role?',
                 'Add an employee?',
                 'Update an employee role?',
-                'Update an employee\'s manager?'
+                'Update an employee\'s manager?',
+                'Update a role\'s department?'
               ]
     },
   //Call specific function depending on choice selected
@@ -62,6 +63,11 @@ function startApp() {
       case 'Update an employee\'s manager?':
         updateEmployeeMngr()
         break;
+
+      case 'Update a role\'s department?':
+        updateRoleDept()
+        break;
+        
     };
   });
 };
@@ -301,4 +307,66 @@ const updateEmployeeMngr = () =>  {
   });
 };
 
+const updateRoleDept = () =>  {
+  
+  let roleArr = []
+  let deptArr = []
+  
+  const sqlRole = `SELECT id, title FROM roles`
+  const sqlDept = `SELECT id, dept_name FROM departments`
 
+  db.query(sqlRole, (err, role) => {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < role.length; i++) {
+      roleArr.push(role[i].title)
+    };
+
+    db.query(sqlDept, (err, dept) => {
+      if (err) {
+        console.log(err);
+      }
+      for (let i = 0; i < dept.length; i++) {
+        deptArr.push(dept[i].dept_name);
+      };
+      inquirer.prompt([
+        {
+          name: 'roleUD',
+          type: 'list',
+          message: 'Which role would you like to update the department for?',
+          choices: roleArr
+        },
+        {
+          name: 'newDept',
+          type: 'list',
+          message: 'What is the role\'s updated department?',
+          choices: deptArr
+        }
+      ]).then(function(ans) {
+        let deptID;
+        let roleID;
+    
+        for (i=0; i < role.length; i++){
+          if (ans.roleUD == role[i].title) {
+            roleID = role[i].id;
+          }
+        };
+
+        for (i=0; i < dept.length; i++){
+          if (ans.newDept == dept[i].dept_name) {
+            deptID = dept[i].id;
+          }
+        };
+
+        const sqlUpdate = `UPDATE roles SET department_id = ${deptID} WHERE id = ${roleID}`
+        db.query(sqlUpdate, (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+          viewRoles();
+        });
+      });
+    });
+  });
+};
