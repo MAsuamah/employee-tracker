@@ -2,7 +2,6 @@
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const roleUD = []
 
 // Start app after DB connection
 db.connect(err => {
@@ -10,7 +9,7 @@ db.connect(err => {
   startApp();
 });
 
-//Inquirer Prompts
+//Inquirer Prompts for Main Menu
 function startApp() {
   inquirer.prompt([
     {
@@ -27,7 +26,9 @@ function startApp() {
                 'Update an employee role?',
                 'Update an employee\'s manager?',
                 'Update a role\'s department?',
-                'Remove a department?'
+                'Remove a department?',
+                'Remove a role?',
+                'Remove an employee?'
               ]
     },
   //Call specific function depending on choice selected
@@ -73,7 +74,13 @@ function startApp() {
         deleteDept()
         break;
 
-        
+      case 'Remove a role?':
+        deleteRole()
+        break;
+
+      case 'Remove an employee?':
+        deleteEmployee()
+        break;
     };
   });
 };
@@ -198,8 +205,8 @@ const updateEmployeeRole = () =>  {
   let employeeChoices = []
   let roleChoices = []
   
-  const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
-  const sqlRole = `SELECT id, title from roles`
+  const sqlEE = `SELECT id, CONCAT(first_name,' ',last_name) AS Employee FROM employees`
+  const sqlRole = `SELECT id, title FROM roles`
 
   db.query(sqlEE, (err, ee) => {
     if (err) {
@@ -261,7 +268,7 @@ const updateEmployeeMngr = () =>  {
   
   let employeeNames = []
   
-  const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
+  const sqlEE = `SELECT id, CONCAT(first_name,' ',last_name) AS Employee FROM employees`
 
   db.query(sqlEE, (err, ee) => {
     if (err) {
@@ -396,7 +403,7 @@ const deleteDept = () =>  {
       {
         name: 'deptDelete',
         type: 'list',
-        message: 'Which department would you like to delete?',
+        message: 'Which department would you like to remove?',
         choices: deptArr
       }
     ]).then(function(ans) {
@@ -414,6 +421,88 @@ const deleteDept = () =>  {
           console.log(err);
         }
         viewDepartments();
+      });
+    });
+  });
+};
+
+const deleteRole = () =>  {
+  
+  let roleArr = []
+  
+  const sqlRole = `SELECT id, title FROM roles`
+
+  db.query(sqlRole, (err, role) => {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < role.length; i++) {
+      roleArr.push(role[i].title);
+    };
+
+    inquirer.prompt([
+      {
+        name: 'roleDelete',
+        type: 'list',
+        message: 'Which role would you like to remove?',
+        choices: roleArr
+      }
+    ]).then(function(ans) {
+      let roleID;
+  
+      for (i=0; i < role.length; i++){
+        if (ans.roleDelete == role[i].title) {
+          roleID = role[i].id;
+        }
+      };
+
+      const sqlUpdate = `DELETE FROM roles WHERE id = ${roleID}`
+      db.query(sqlUpdate, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        viewRoles();
+      });
+    });
+  });
+};
+
+const deleteEmployee = () =>  {
+  
+  let eeArr = []
+  
+  const sqlEE = `SELECT id, CONCAT(first_name,' ',last_name) AS Employee FROM employees`
+
+  db.query(sqlEE, (err, ee) => {
+    if (err) {
+      console.log(err);
+    }
+    for (let i = 0; i < ee.length; i++) {
+      eeArr.push(ee[i].Employee);
+    };
+
+    inquirer.prompt([
+      {
+        name: 'eeDelete',
+        type: 'list',
+        message: 'Which employee would you like to remove?',
+        choices: eeArr
+      }
+    ]).then(function(ans) {
+      let employeeID;
+  
+      for (i=0; i < ee.length; i++){
+        if (ans.eeDelete == ee[i].Employee) {
+          employeeID = ee[i].id;
+        }
+      };
+
+      const sqlUpdate = `DELETE FROM employees WHERE id = ${employeeID}`
+      db.query(sqlUpdate, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        viewEmployees()
       });
     });
   });
