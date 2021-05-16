@@ -170,45 +170,47 @@ const addEmployee = () =>  {
 };
 
 const updateEmployeeRole = () =>  {
-
-  let roleChoices = []
-  let employeeChoices = []
   
-  const sqlRole = `SELECT id, title from roles`
+  let employeeChoices = []
+  let roleChoices = []
+  
   const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
+  const sqlRole = `SELECT id, title from roles`
 
   db.query(sqlEE, (err, rows) => {
-    
     if (err) {
       console.log(err);
     }
-      for (let i = 0; i < rows.length; i++) {
-        employeeChoices.push(rows[i].Employee)
-      }
-  });
+    for (let i = 0; i < rows.length; i++) {
+      employeeChoices.push(rows[i].Employee)
+    }
 
-  db.query(sqlRole, (err, rows) => {
+    db.query(sqlRole, (err, rows) => {
     
-    if (err) {
-      console.log(err);
-    }
+      if (err) {
+        console.log(err);
+      }
       for (let i = 0; i < rows.length; i++) {
         roleChoices.push(rows[i].title)
       }
-  })
-
-  inquirer.prompt([
-    {
+    })
+    inquirer.prompt([
+      {
         name: 'eeChoices',
         type: 'list',
         message: 'Whose role would you like to update?',
         choices: employeeChoices
-    }, 
-    {
+      },
+      {
         name: 'roleChoices',
         type: 'list',
         message: 'What is their new role?',
         choices: roleChoices
-    }
-  ])
-};
+      }
+    ]);
+  })
+}
+
+
+
+
