@@ -2,6 +2,7 @@
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const roleUD = []
 
 // Start app after DB connection
 db.connect(err => {
@@ -177,40 +178,61 @@ const updateEmployeeRole = () =>  {
   const sqlEE = `SELECT id, concat(first_name,' ',last_name) AS Employee from employees`
   const sqlRole = `SELECT id, title from roles`
 
-  db.query(sqlEE, (err, rows) => {
+  db.query(sqlEE, (err, ee) => {
     if (err) {
       console.log(err);
     }
-    for (let i = 0; i < rows.length; i++) {
-      employeeChoices.push(rows[i].Employee)
+    for (let i = 0; i < ee.length; i++) {
+      employeeChoices.push(ee[i].Employee)
     }
 
-    db.query(sqlRole, (err, rows) => {
-    
+    db.query(sqlRole, (err, role) => {
       if (err) {
         console.log(err);
       }
-      for (let i = 0; i < rows.length; i++) {
-        roleChoices.push(rows[i].title)
+      for (let i = 0; i < role.length; i++) {
+        roleChoices.push(role[i].title)
       }
-    })
-    inquirer.prompt([
-      {
-        name: 'eeChoices',
-        type: 'list',
-        message: 'Whose role would you like to update?',
-        choices: employeeChoices
-      },
-      {
-        name: 'roleChoices',
-        type: 'list',
-        message: 'What is their new role?',
-        choices: roleChoices
-      }
-    ]);
+      console.log(ee)
+      console.log(role)
+      inquirer.prompt([
+        {
+          name: 'eeChoices',
+          type: 'list',
+          message: 'Whose role would you like to update?',
+          choices: employeeChoices
+        },
+        {
+          name: 'roleChoices',
+          type: 'list',
+          message: 'What is their new role?',
+          choices: roleChoices
+        }
+      ]).then(function(ans) {
+        let employeeID;
+        let roleID;
+    
+        for (i=0; i < ee.length; i++){
+          if (ans.eeChoices == ee[i].Employee) {
+            employeeID = ee[i].id;
+          }
+        }
+
+        for (i=0; i < role.length; i++){
+          if (ans.roleChoices == role[i].title){
+            roleID = role[i].id;
+          }
+        }
+        const sqlUpdate = `UPDATE employees SET role_id = ${roleID} WHERE id = ${employeeID}`
+        db.query(sqlUpdate, (err, res) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      })
+    });
   })
 }
-
 
 
 
