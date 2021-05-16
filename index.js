@@ -86,7 +86,7 @@ const viewDepartments = () =>  {
 
 //View Roles function
 const viewRoles = () =>  {
-  const sql = `SELECT roles.title, roles.salary, departments.dept_name
+  const sql = `SELECT roles.id, roles.title, roles.salary, departments.dept_name
   FROM roles
   LEFT JOIN departments ON roles.department_id = departments.id`;
 
@@ -101,9 +101,10 @@ const viewRoles = () =>  {
 
 //View Employees function
 const viewEmployees = () =>  {
-  const sql = `SELECT employees.first_name, employees.last_name, roles.title, CONCAT(emp.first_name, ' ' ,emp.last_name) AS Manager 
+  const sql = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.dept_name As department, roles.salary, CONCAT(emp.first_name, ' ' ,emp.last_name) AS Manager 
   FROM employees
   LEFT JOIN roles ON employees.role_id = roles.id
+  LEFT JOIN departments ON roles.department_id = departments.id
   LEFT JOIN employees emp ON employees.manager_id = emp.id; `;
   db.query(sql, (err, rows) => {
     if (err) {
