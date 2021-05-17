@@ -15,7 +15,7 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 * In your terminal while still in the root folder of employee-tracker run `mysql -u root -p` then enter your MySQL password when prompted.
 * Now in the MySQL shell run `source db/db.sql` to create the employee database.
 * Next run `source db/schema.sql`to create the departments, roles, and employees tables.
-* There is also a seeds file you can use to pre-populate your tables with dummy data. Run `source db/seeds.sql` to do so. Otherwise skip this step so you can add your own data.
+* There is also a seeds file you can use to pre-populate your tables with test data. Run `source db/seeds.sql` to do so. Otherwise skip this step so you can add your own data.
 * Type `quit;` to exit the MySQL shell.
 
 ## How To Use
