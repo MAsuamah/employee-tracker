@@ -24,9 +24,8 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 
 <img width="338" alt="Screen Shot 2021-05-16 at 4 25 26 PM" src="https://user-images.githubusercontent.com/77217156/118411786-5260ea00-b664-11eb-8d65-44de454e7478.png">
 
-* To exit the application use CTL + C
-
 * Pick which ever action you would like to execute and and follow the prompts. See the [Walkthrough-Video](#walkthrough-video) for more on how to use the app.
+* To exit the application use CTL + C
 
 ## Walkthrough-Video
 https://drive.google.com/file/d/1z7SQHMx6fz1TZF-3L5BmW5CBpW8SVa0Z/view?usp=sharing
