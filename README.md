@@ -11,11 +11,11 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 * Clone the repository onto your local machine.
 * Once the Employee Tracker is on your machine, open your terminal and cd into. the root folder of the Employee Tracker.
 * While in the root folder, you must first run `npm install` to load all the dependancies needed for the app run.
-* Next you should open the connection.js file and edit it to contain your MySQL credentials. [screenshot of file].
+* Next you should open the connection.js file and edit it to contain your MySQL credentials.
 * In your terminal while still in the root folder of employee-tracker run `mysql -u root -p` then enter your MySQL password when prompted.
 * Now in the MySQL shell run `source db/db.sql` to create the employee database.
 * Next run `source db/schema.sql`to create the departments, roles, and employees tables.
-* There is also a seeds file you can use to pre-populate you tables with dummy data. Run `source db/seeds.sql` to do so. Otherwise skip this step so you can add your won data.
+* There is also a seeds file you can use to pre-populate you tables with dummy data. Run `source db/seeds.sql` to do so. Otherwise skip this step so you can add your own data.
 * Type `quit;` to exit the MySQL shell.
 
 ## How To Use
