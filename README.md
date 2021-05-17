@@ -9,7 +9,7 @@ The Employee Tracker is a command line app used to keep track and manage the dep
 ** This app uses MySQL and you will need to have MySQL installed to operate this application.**
 
 * Clone the repository onto your local machine.
-* Once the Employee Tracker is on your machine, open your terminal and cd into. the root folder of the Employee Tracker.
+* Once the Employee Tracker is on your machine, open your terminal and cd into the root folder of the Employee Tracker.
 * While in the root folder, you must first run `npm install` to load all the dependancies needed for the app to run.
 * Next you should open the connection.js file and edit it to contain your MySQL credentials.
 * In your terminal while still in the root folder of employee-tracker run `mysql -u root -p` then enter your MySQL password when prompted.
